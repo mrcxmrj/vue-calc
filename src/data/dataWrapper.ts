@@ -6,12 +6,13 @@ import type {
     EndingOperation,
     Data,
     SummaryItem,
+    ValueItem,
 } from "./../types/types";
 
 const typedData: Data = data;
 
 const scopes: Scope[] =
-    (typedData.find((item) => item.type === "sectionDefinition")
+    (typedData.find((item) => item.type === "scopeDefinition")
         ?.items as Scope[]) || [];
 
 const sections: Section[] =
