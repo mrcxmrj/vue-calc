@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
 import data from "../assets/data.json";
-import type {
-    Section,
-    SectionItem,
-    Operation,
-    MustSelectRequirement,
-} from "../types/types";
+import type { Section, Operation, MustSelectRequirement } from "../types/types";
 import SectionItemDisplay from "./SectionItem.vue";
 
 const props = defineProps<{
