@@ -1,12 +1,42 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import type { Operation, SectionItem } from "../types/types";
 
 const props = defineProps<{
     item: SectionItem;
+    activeScopes: string[];
 }>();
 const item = props.item;
 
-const enableScope = (scope: string) => {};
+const emit = defineEmits(["enableScope", "updateValue"]);
+
+const oddClicks = ref<boolean>(true);
+
+const handleClick = () => {
+    oddClicks.value = !oddClicks.value;
+    emit("enableScope", item.name);
+    for (const operation of item.operationsIfEnabled) {
+        if (oddClicks.value) {
+            emit("updateValue", {
+                type: "default",
+                targetValue: operation.relatedValue,
+                number: operation.number,
+            });
+            continue;
+        }
+        if (
+            operation.executeIfScopeEnabled &&
+            props.activeScopes.includes(operation.executeIfScopeEnabled)
+        )
+            continue;
+
+        emit("updateValue", {
+            type: operation.type,
+            targetValue: operation.relatedValue,
+            number: operation.number,
+        });
+    }
+};
 
 const getOperationMessage = (operation: Operation) => {
     let message = "";
@@ -31,9 +61,8 @@ const getOperationMessage = (operation: Operation) => {
         <h3>{{ item.name }}</h3>
         <p>{{ item.description }}</p>
         <img :src="item.imgHref" :alt="item.name" width="100" height="100" />
-        <button @click="enableScope(item.enableScope)">
-            Enable {{ item.name }}
-        </button>
+        <button @click="handleClick">Enable {{ item.name }}</button>
+
         <div
             v-for="operation in item.operationsIfEnabled"
             :key="operation.type"

@@ -42,12 +42,4 @@ for (const item of values) {
 
 const price: ValueItem = valueItems.find((item) => item.type === "price")!;
 
-console.log(defaultValues);
-export {
-    scopes,
-    sections,
-    endingOperations,
-    summary,
-    defaultValues as valuesData,
-    price,
-};
+export { scopes, sections, endingOperations, summary, defaultValues, price };

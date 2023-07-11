@@ -1,12 +1,31 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
-import type { Section, Operation, MustSelectRequirement } from "../types/types";
+import type { Section } from "../types/types";
 import SectionItemDisplay from "./SectionItem.vue";
 
 const props = defineProps<{
     sectionData: Section;
 }>();
 const section = props.sectionData;
+
+const activeScopes = ref<string[]>([]);
+
+const enableScope = (scope: string) => {
+    if (activeScopes.value.includes(scope)) {
+        activeScopes.value = activeScopes.value.filter((el) => el !== scope);
+    } else {
+        activeScopes.value.push(scope);
+    }
+};
+
+const emit = defineEmits(["updateValue"]);
+const passUpdateData = (updateObject: {
+    type: string;
+    targetValue: string;
+    number: number;
+}) => {
+    emit("updateValue", updateObject);
+};
 </script>
 
 <template>
@@ -20,6 +39,9 @@ const section = props.sectionData;
                 v-for="item in section.items"
                 :key="item.name"
                 :item="item"
+                :active-scopes="activeScopes"
+                @enable-scope="enableScope"
+                @update-value="passUpdateData"
             />
         </div>
     </div>
