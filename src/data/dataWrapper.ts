@@ -5,7 +5,7 @@ import type {
     Section,
     EndingOperation,
     Data,
-    SummaryItem,
+    Summary,
     ValueItem,
 } from "./../types/types";
 
@@ -23,9 +23,31 @@ const endingOperations: EndingOperation[] =
     (typedData.find((item) => item.type === "endingOperationsDefinition")
         ?.items as EndingOperation[]) || [];
 
-const summaries: SummaryItem[] =
-    (typedData.find((item) => item.type === "summaryDefinition")
-        ?.items as SummaryItem[]) || [];
+// there is only one summary
+const summary: Summary = typedData.find(
+    (item) => item.type === "summaryDefinition"
+)?.items[0] as Summary;
 
-console.log(scopes, sections, endingOperations, summaries);
-export { scopes, sections, endingOperations, summaries };
+const valueItems: ValueItem[] =
+    (typedData.find((item) => item.type === "valuesDefinition")
+        ?.items as ValueItem[]) || [];
+
+const values: ValueItem[] = valueItems.filter((item) => item.type === "value");
+
+const defaultValues: Record<string, number> = {};
+for (const item of values) {
+    const { id, defaultValue } = item;
+    defaultValues[id] = defaultValue;
+}
+
+const price: ValueItem = valueItems.find((item) => item.type === "price")!;
+
+console.log(defaultValues);
+export {
+    scopes,
+    sections,
+    endingOperations,
+    summary,
+    defaultValues as valuesData,
+    price,
+};

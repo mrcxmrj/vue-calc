@@ -12,7 +12,7 @@ export interface ScopeDefinition {
 export interface Section {
     type: string;
     name: string;
-    mustSelectRequirement: MustSelectRequirement;
+    mustSelectRequirement?: MustSelectRequirement;
     selectionType: "single" | "multi";
     items: SectionWithScope[];
 }
@@ -58,7 +58,7 @@ export interface EndingOperationsDefinition {
     items: EndingOperation[];
 }
 
-export interface SummaryItem {
+export interface Summary {
     type: string;
     text?: string;
 }
@@ -68,7 +68,7 @@ export interface SummaryDefinition {
     totalPriceDescription?: string;
     noScopeDisclaimer?: string;
     currency?: string;
-    items: SummaryItem[];
+    items: Summary[];
 }
 
 export interface ValueItem {

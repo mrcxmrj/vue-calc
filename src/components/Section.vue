@@ -12,7 +12,7 @@ const section = props.sectionData;
 <template>
     <div class="sectionWrapper">
         <h2>{{ section.name }}</h2>
-        <p v-if="section.mustSelectRequirement.enabled">
+        <p v-if="section.mustSelectRequirement?.enabled">
             {{ section.mustSelectRequirement.messageIfNotSelected }}
         </p>
         <div class="items">
