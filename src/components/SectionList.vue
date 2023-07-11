@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
-import data from "../assets/data.json";
 import type { Section, Operation, MustSelectRequirement } from "../types/types";
 import SectionComponent from "./Section.vue";
-import { sections as sectionsData } from "@/assets/dataWrapper";
+import { sections as sectionsData } from "@/data/dataWrapper";
 
 const sections: Section[] = sectionsData;
 </script>
