@@ -14,7 +14,7 @@ export interface Section {
     name: string;
     mustSelectRequirement?: MustSelectRequirement;
     selectionType: "single" | "multi";
-    items: SectionWithScope[];
+    items: SectionItem[];
 }
 
 export interface SectionDefinition {
@@ -27,7 +27,7 @@ export interface MustSelectRequirement {
     messageIfNotSelected: string;
 }
 
-export interface SectionWithScope {
+export interface SectionItem {
     type: string;
     name: string;
     description: string;
