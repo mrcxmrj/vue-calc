@@ -1,4 +1,4 @@
-export interface ScopeItem {
+export interface Scope {
     type: string;
     name: string;
     id: string;
@@ -6,20 +6,20 @@ export interface ScopeItem {
 
 export interface ScopeDefinition {
     type: string;
-    items: ScopeItem[];
+    items: Scope[];
 }
 
-export interface SectionItem {
+export interface Section {
     type: string;
     name: string;
     mustSelectRequirement: MustSelectRequirement;
     selectionType: "single" | "multi";
-    items: SectionItemWithScope[];
+    items: SectionWithScope[];
 }
 
 export interface SectionDefinition {
     type: string;
-    items: SectionItem[];
+    items: Section[];
 }
 
 export interface MustSelectRequirement {
@@ -27,7 +27,7 @@ export interface MustSelectRequirement {
     messageIfNotSelected: string;
 }
 
-export interface SectionItemWithScope {
+export interface SectionWithScope {
     type: string;
     name: string;
     description: string;

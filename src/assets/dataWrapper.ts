@@ -1,24 +1,22 @@
 /*eslint-env es6*/
 import data from "./data.json";
 import type {
-    ScopeItem,
-    SectionItem,
+    Scope,
+    Section,
     EndingOperation,
-    Operation,
     Data,
     SummaryItem,
-    ScopeDefinition,
 } from "./../types/types";
 
 const typedData: Data = data;
 
-const scopes: ScopeItem[] =
+const scopes: Scope[] =
     (typedData.find((item) => item.type === "sectionDefinition")
-        ?.items as ScopeItem[]) || [];
+        ?.items as Scope[]) || [];
 
-const sections: SectionItem[] =
+const sections: Section[] =
     (typedData.find((item) => item.type === "sectionDefinition")
-        ?.items as SectionItem[]) || [];
+        ?.items as Section[]) || [];
 
 const endingOperations: EndingOperation[] =
     (typedData.find((item) => item.type === "endingOperationsDefinition")

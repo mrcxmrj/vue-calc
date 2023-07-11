@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Operation, SectionItem } from "../types/types";
+import type { Operation, SectionWithScope } from "../types/types";
 
 const props = defineProps<{
-    item: SectionItem;
+    item: SectionWithScope;
 }>();
 const item = props.item;
 
