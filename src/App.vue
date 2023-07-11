@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Section from "./components/Section.vue";
+import SectionList from "./components/SectionList.vue";
 
 const data = {
     type: "section",
@@ -85,7 +85,7 @@ const data = {
 </script>
 
 <template>
-    <Section :sectionData="data" />
+    <SectionList />
 </template>
 
 <style scoped></style>

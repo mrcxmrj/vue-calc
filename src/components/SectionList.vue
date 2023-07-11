@@ -5,10 +5,7 @@ import type { Section, Operation, MustSelectRequirement } from "../types/types";
 import SectionComponent from "./Section.vue";
 import { sections as sectionsData } from "@/assets/dataWrapper";
 
-const props = defineProps<{
-    sectionData: Section;
-}>();
-const sections: Section[] = sectionsData || [];
+const sections: Section[] = sectionsData;
 </script>
 
 <template>
