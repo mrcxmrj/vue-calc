@@ -44,7 +44,7 @@ const refreshPage = () => window.location.reload()
             {{ summary.noScopeDisclaimer }}
         </p>
         <p v-else>
-            {{ activeScopes.map((item) => item.name).join(" + ") }}
+            <h3>{{ activeScopes.map((item) => item.name).join(" + ") }}</h3>
         </p>
         <ul>
             <li v-for="section in props.incompleteSections" :key="section.name">
