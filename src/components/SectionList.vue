@@ -16,6 +16,7 @@ const values = reactive({
     building_days: defaultValues["building_days"],
     multiplied_building_days: defaultValues["multiplied_building_days"],
     active_working_hours: defaultValues["active_working_hours"],
+    price: defaultValues["price"],
 });
 
 const updateValue = ({
