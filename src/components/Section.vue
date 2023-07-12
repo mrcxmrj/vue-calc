@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
-import type { Section } from "../types/types";
+import type { Scope, Section } from "../types/types";
 import SectionItemDisplay from "./SectionItem.vue";
 
 const props = defineProps<{
     sectionData: Section;
+    activeScopes: Scope[];
 }>();
 const section = props.sectionData;
-const emit = defineEmits(["updateValue", "completeSection"]);
+const emit = defineEmits(["updateValue", "completeSection", "enableScope"]);
 
-const activeScopes = ref<string[]>([]);
+// const activeScopes = ref<string[]>([]);
 
-const enableScope = (scope: string) => {
-    emit("completeSection", section.name);
-    if (activeScopes.value.includes(scope)) {
-        activeScopes.value = activeScopes.value.filter((el) => el !== scope);
-    } else {
-        activeScopes.value.push(scope);
-    }
+const passScope = (scopeId: string) => {
+    emit("enableScope", scopeId);
 };
 
 const passUpdateData = (updateObject: {
@@ -25,6 +21,7 @@ const passUpdateData = (updateObject: {
     targetValue: string;
     number: number;
 }) => {
+    emit("completeSection", section.name);
     emit("updateValue", updateObject);
 };
 </script>
@@ -40,8 +37,8 @@ const passUpdateData = (updateObject: {
                 v-for="item in section.items"
                 :key="item.name"
                 :item="item"
-                :active-scopes="activeScopes"
-                @enable-scope="enableScope"
+                :active-scopes="props.activeScopes"
+                @enable-scope="passScope"
                 @update-value="passUpdateData"
             />
         </div>

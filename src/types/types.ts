@@ -32,7 +32,7 @@ export interface SectionItem {
     name: string;
     description: string;
     imgHref: string;
-    enableScope: string;
+    enableScope?: string;
     operationsIfEnabled: Operation[];
 }
 

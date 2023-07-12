@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Operation, SectionItem } from "../types/types";
+import type { Operation, Scope, SectionItem } from "../types/types";
 
 const props = defineProps<{
     item: SectionItem;
-    activeScopes: string[];
+    activeScopes: Scope[];
 }>();
 const item = props.item;
 
@@ -14,7 +14,7 @@ const oddClicks = ref<boolean>(true);
 
 const handleClick = () => {
     oddClicks.value = !oddClicks.value;
-    emit("enableScope", item.name);
+    if (item.enableScope) emit("enableScope", item.enableScope);
     for (const operation of item.operationsIfEnabled) {
         if (oddClicks.value) {
             emit("updateValue", {
@@ -26,7 +26,9 @@ const handleClick = () => {
         }
         if (
             operation.executeIfScopeEnabled &&
-            props.activeScopes.includes(operation.executeIfScopeEnabled)
+            props.activeScopes.some(
+                (el) => el.id === operation.executeIfScopeEnabled
+            )
         )
             continue;
 

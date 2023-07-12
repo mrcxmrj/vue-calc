@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import type { Section, Values } from "../types/types";
+import type { Scope, Section, Values } from "../types/types";
 import SectionComponent from "./Section.vue";
 import SummaryComponent from "./Summary.vue";
-import { sections as sectionsData, defaultValues } from "@/data/dataWrapper";
+import {
+    sections as sectionsData,
+    defaultValues,
+    scopes,
+} from "@/data/dataWrapper";
 
 const sections: Section[] = sectionsData;
 
@@ -57,6 +61,22 @@ const completeSection = (section: string) => {
         (el) => el.name !== section
     );
 };
+
+const activeScopes = ref<Scope[]>([]);
+
+// toggles the presense of scope
+const enableScope = (scopeId: string) => {
+    const scopeObject = scopes.find((el) => el.id === scopeId);
+    if (!scopeObject) return;
+    if (activeScopes.value.some((el) => el.id === scopeId)) {
+        activeScopes.value = activeScopes.value.filter(
+            (el) => el !== scopeObject
+        );
+    } else {
+        activeScopes.value.push(scopeObject);
+    }
+    console.log(activeScopes.value);
+};
 </script>
 
 <template>
@@ -64,11 +84,14 @@ const completeSection = (section: string) => {
         v-for="section in sections"
         :key="section.name"
         :sectionData="section"
+        :active-scopes="activeScopes"
         @updateValue="updateValue"
+        @enable-scope="enableScope"
         @completeSection="completeSection"
     />
     <SummaryComponent
         :incompleteSections="incompleteSections"
+        :activeScopes="activeScopes"
         :values="values"
     />
 </template>
