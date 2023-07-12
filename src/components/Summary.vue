@@ -1,17 +1,41 @@
 <script setup lang="ts">
-import { summary } from "@/data/dataWrapper";
+import { endingOperations, summary } from "@/data/dataWrapper";
+import type { Values } from "@/types/types";
 import { defineComponent, computed, watch, toRef } from "vue";
 
 const props = defineProps<{
     incompleteSections: { name: string; message: string }[];
+    values: Values;
 }>();
+const values = props.values;
+const performEndingOperations = () => {
+    console.log("calculating...");
+    for (const operation of endingOperations) {
+        switch (operation.type) {
+            case "addValues":
+                values[operation.toValue!] += values[operation.fromValue!];
+                break;
+            case "copyValues":
+                values[operation.toValue!] = values[operation.fromValue!];
+                break;
+            case "multiplyValues":
+                values[operation.value!] *= values[operation.byValue!];
+                break;
+            case "multiply":
+                values[operation.relatedValue!] *= operation.number!;
+                break;
+            default:
+                break;
+        }
+    }
+};
 
 const reactiveIncompleteSections = toRef(props, "incompleteSections");
 watch(reactiveIncompleteSections, (currIncompleteSections) => {
-    if (currIncompleteSections.length === 0) console.log("calculation time!");
+    if (currIncompleteSections.length === 0) performEndingOperations();
 });
 
-const totalPrice = computed(() => 100); // Replace with your logic to calculate the total price
+// const totalPrice = computed(() => 100); // Replace with your logic to calculate the total price
 const hasScope = computed(() => true); // Replace with your logic to determine if options are selected
 
 const formatItemText = (text: string) => {
@@ -25,7 +49,7 @@ const formatItemText = (text: string) => {
 <template>
     <div>
         <p>
-            {{ summary.totalPriceDescription }}{{ totalPrice
+            {{ summary.totalPriceDescription }}{{ values.price
             }}{{ summary.currency }}
         </p>
         <ul>

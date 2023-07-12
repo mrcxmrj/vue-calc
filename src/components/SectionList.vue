@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import type { Section } from "../types/types";
+import type { Section, Values } from "../types/types";
 import SectionComponent from "./Section.vue";
 import SummaryComponent from "./Summary.vue";
 import { sections as sectionsData, defaultValues } from "@/data/dataWrapper";
 
 const sections: Section[] = sectionsData;
 
-const values = reactive({
+const values = reactive<Values>({
     roller_multiplier: defaultValues["roller_multiplier"],
     excavator_crane_multiplier: defaultValues["excavator_crane_multiplier"],
     speed_multiplier: defaultValues["speed_multiplier"],
@@ -67,7 +67,10 @@ const completeSection = (section: string) => {
         @updateValue="updateValue"
         @completeSection="completeSection"
     />
-    <SummaryComponent :incompleteSections="incompleteSections" />
+    <SummaryComponent
+        :incompleteSections="incompleteSections"
+        :values="values"
+    />
 </template>
 
 <style scoped>

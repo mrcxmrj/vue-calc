@@ -45,11 +45,11 @@ export interface Operation {
 
 export interface EndingOperation {
     type: "addValues" | "copyValues" | "multiplyValues" | "multiply";
-    fromValue?: string;
-    toValue?: string;
-    byValue?: string;
-    value?: string;
-    relatedValue?: string;
+    fromValue?: keyof Values;
+    toValue?: keyof Values;
+    byValue?: keyof Values;
+    value?: keyof Values;
+    relatedValue?: keyof Values;
     number?: number;
 }
 
@@ -89,3 +89,15 @@ export type Data = (
     | SummaryDefinition
     | ValuesDefinition
 )[];
+
+export interface Values {
+    roller_multiplier: number;
+    excavator_crane_multiplier: number;
+    speed_multiplier: number;
+    workday_price: number;
+    multiplier: number;
+    building_days: number;
+    multiplied_building_days: number;
+    active_working_hours: number;
+    price: number;
+}
