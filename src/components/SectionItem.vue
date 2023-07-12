@@ -5,6 +5,7 @@ import type { Operation, Scope, SectionItem } from "../types/types";
 const props = defineProps<{
     item: SectionItem;
     activeScopes: Scope[];
+    blockSection: boolean;
 }>();
 const item = props.item;
 
@@ -13,7 +14,7 @@ const emit = defineEmits(["enableScope", "updateValue"]);
 const isClicked = ref<boolean>(false);
 
 const handleClick = () => {
-    if (isClicked.value === true) return;
+    if (isClicked.value || props.blockSection) return;
     isClicked.value = true;
     if (item.enableScope) emit("enableScope", item.enableScope);
     for (const operation of item.operationsIfEnabled) {
@@ -36,8 +37,11 @@ const handleClick = () => {
 
 <template>
     <div class="item-container">
-        <h3>{{ item.name }}</h3>
-        <div class="image-container" :class="{ clicked: isClicked }">
+        <h3 :style="{ color: blockSection ? 'gray' : '' }">{{ item.name }}</h3>
+        <div
+            class="image-container"
+            :class="{ clicked: isClicked, blocked: blockSection }"
+        >
             <img
                 :src="item.imgHref"
                 :alt="item.name"
@@ -73,7 +77,7 @@ const handleClick = () => {
     box-sizing: border-box;
 }
 
-.image-container:hover {
+.image-container:hover:not(.blocked) {
     border: 3px solid lightgreen;
     cursor: pointer;
 }

@@ -10,8 +10,7 @@ const props = defineProps<{
 const section = props.sectionData;
 const emit = defineEmits(["updateValue", "completeSection", "enableScope"]);
 
-// const activeScopes = ref<string[]>([]);
-
+const blockSection = ref<boolean>(false);
 const passScope = (scopeId: string) => {
     emit("enableScope", scopeId);
 };
@@ -21,6 +20,7 @@ const passUpdateData = (updateObject: {
     targetValue: string;
     number: number;
 }) => {
+    if (section.selectionType === "single") blockSection.value = true;
     emit("completeSection", section.name);
     emit("updateValue", updateObject);
 };
@@ -35,6 +35,7 @@ const passUpdateData = (updateObject: {
                 :key="item.name"
                 :item="item"
                 :active-scopes="props.activeScopes"
+                :block-section="blockSection"
                 @enable-scope="passScope"
                 @update-value="passUpdateData"
                 class="item"

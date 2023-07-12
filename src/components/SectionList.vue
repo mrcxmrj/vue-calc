@@ -75,7 +75,6 @@ const enableScope = (scopeId: string) => {
     } else {
         activeScopes.value.push(scopeObject);
     }
-    console.log(activeScopes.value);
 };
 </script>
 
