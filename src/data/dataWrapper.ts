@@ -5,8 +5,9 @@ import type {
     Section,
     EndingOperation,
     Data,
-    Summary,
+    SummaryItem,
     ValueItem,
+    SummaryDefinition,
 } from "./../types/types";
 
 const typedData: Data = data;
@@ -24,9 +25,9 @@ const endingOperations: EndingOperation[] =
         ?.items as EndingOperation[]) || [];
 
 // there is only one summary
-const summary: Summary = typedData.find(
+const summary: SummaryDefinition = typedData.find(
     (item) => item.type === "summaryDefinition"
-)?.items[0] as Summary;
+) as SummaryDefinition;
 
 const valueItems: ValueItem[] =
     (typedData.find((item) => item.type === "valuesDefinition")

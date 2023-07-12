@@ -58,7 +58,7 @@ export interface EndingOperationsDefinition {
     items: EndingOperation[];
 }
 
-export interface Summary {
+export interface SummaryItem {
     type: string;
     text?: string;
 }
@@ -68,7 +68,7 @@ export interface SummaryDefinition {
     totalPriceDescription?: string;
     noScopeDisclaimer?: string;
     currency?: string;
-    items: Summary[];
+    items: SummaryItem[];
 }
 
 export interface ValueItem {

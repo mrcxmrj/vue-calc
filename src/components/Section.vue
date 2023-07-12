@@ -7,10 +7,12 @@ const props = defineProps<{
     sectionData: Section;
 }>();
 const section = props.sectionData;
+const emit = defineEmits(["updateValue", "completeSection"]);
 
 const activeScopes = ref<string[]>([]);
 
 const enableScope = (scope: string) => {
+    emit("completeSection", section.name);
     if (activeScopes.value.includes(scope)) {
         activeScopes.value = activeScopes.value.filter((el) => el !== scope);
     } else {
@@ -18,7 +20,6 @@ const enableScope = (scope: string) => {
     }
 };
 
-const emit = defineEmits(["updateValue"]);
 const passUpdateData = (updateObject: {
     type: string;
     targetValue: string;

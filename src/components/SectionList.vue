@@ -2,6 +2,7 @@
 import { defineComponent, reactive, ref } from "vue";
 import type { Section } from "../types/types";
 import SectionComponent from "./Section.vue";
+import SummaryComponent from "./Summary.vue";
 import { sections as sectionsData, defaultValues } from "@/data/dataWrapper";
 
 const sections: Section[] = sectionsData;
@@ -38,6 +39,23 @@ const updateValue = ({
             break;
     }
 };
+
+const requiredSections = sections.flatMap((section) =>
+    section.mustSelectRequirement?.enabled
+        ? {
+              name: section.name,
+              message: section.mustSelectRequirement.messageIfNotSelected,
+          }
+        : []
+);
+
+const incompleteSections = ref(requiredSections);
+
+const completeSection = (section: string) => {
+    incompleteSections.value = incompleteSections.value.filter(
+        (el) => el.name !== section
+    );
+};
 </script>
 
 <template>
@@ -46,7 +64,9 @@ const updateValue = ({
         :key="section.name"
         :sectionData="section"
         @updateValue="updateValue"
+        @completeSection="completeSection"
     />
+    <SummaryComponent :incompleteSections="incompleteSections" />
 </template>
 
 <style scoped>
