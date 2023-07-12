@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { endingOperations, summary } from "@/data/dataWrapper";
 import type { Scope, Values } from "@/types/types";
-import { defineComponent, computed, watch, toRef } from "vue";
+import { watch, toRef } from "vue";
 
 const props = defineProps<{
     incompleteSections: { name: string; message: string }[];
@@ -70,7 +70,7 @@ const refreshPage = () => window.location.reload()
     border-radius: 4px;
     background-color: red;
     box-sizing: border-box;
-    padding: 10px; /* Add padding/margins to the top and bottom */
+    padding: 10px;
 }
 
 .refresh-button {

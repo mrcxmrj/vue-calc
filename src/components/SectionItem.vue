@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import type { Operation, Scope, SectionItem } from "../types/types";
+import { ref } from "vue";
+import type { Scope, SectionItem } from "../types/types";
 
 const props = defineProps<{
     item: SectionItem;

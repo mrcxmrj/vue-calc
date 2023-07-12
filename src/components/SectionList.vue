@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import type { Scope, Section, Values } from "../types/types";
 import SectionComponent from "./Section.vue";
 import SummaryComponent from "./Summary.vue";
@@ -64,7 +64,7 @@ const completeSection = (section: string) => {
 
 const activeScopes = ref<Scope[]>([]);
 
-// toggles the presense of scope
+// toggles the presence of scope
 const enableScope = (scopeId: string) => {
     const scopeObject = scopes.find((el) => el.id === scopeId);
     if (!scopeObject) return;

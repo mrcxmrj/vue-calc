@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 import type { Scope, Section } from "../types/types";
 import SectionItemDisplay from "./SectionItem.vue";
 
@@ -61,9 +61,9 @@ const passUpdateData = (updateObject: {
 }
 
 h2 {
-    text-align: center; /* Center align the header */
+    text-align: center;
 }
-/* Media query for mobile devices */
+
 @media (max-width: 768px) {
     .items {
         flex-direction: column;
@@ -71,7 +71,7 @@ h2 {
     }
 
     .item {
-        flex-basis: 100%; /* Take up full width on mobile */
+        flex-basis: 100%;
         margin-bottom: 10px;
     }
 }
