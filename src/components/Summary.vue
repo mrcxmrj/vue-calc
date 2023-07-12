@@ -37,7 +37,7 @@ watch(reactiveIncompleteSections, (currIncompleteSections) => {
 </script>
 
 <template>
-    <div>
+    <div class="summaryContainer">
         <p>
             {{ summary.totalPriceDescription }}{{ values.price
             }}{{ summary.currency }}
@@ -55,3 +55,10 @@ watch(reactiveIncompleteSections, (currIncompleteSections) => {
         </ul>
     </div>
 </template>
+<style scoped>
+.summaryContainer {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    background-color: red;
+}
+</style>

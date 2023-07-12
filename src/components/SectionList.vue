@@ -80,29 +80,51 @@ const enableScope = (scopeId: string) => {
 </script>
 
 <template>
-    <SectionComponent
-        v-for="section in sections"
-        :key="section.name"
-        :sectionData="section"
-        :active-scopes="activeScopes"
-        @updateValue="updateValue"
-        @enable-scope="enableScope"
-        @completeSection="completeSection"
-    />
-    <SummaryComponent
-        :incompleteSections="incompleteSections"
-        :activeScopes="activeScopes"
-        :values="values"
-    />
+    <div class="container">
+        <SectionComponent
+            v-for="section in sections"
+            :key="section.name"
+            :sectionData="section"
+            :active-scopes="activeScopes"
+            @updateValue="updateValue"
+            @enable-scope="enableScope"
+            @completeSection="completeSection"
+        />
+        <SummaryComponent
+            :incompleteSections="incompleteSections"
+            :activeScopes="activeScopes"
+            :values="values"
+        />
+    </div>
 </template>
 
 <style scoped>
-.sectionWrapper {
-    background-color: red;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 20px;
     color: white;
+    font-family: "Arial", sans-serif;
 }
 
-.items {
-    display: flex;
+@media (max-width: 768px) {
+    .container {
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+    }
+}
+
+.container > * {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.container > *:last-child {
+    margin-bottom: 0;
 }
 </style>

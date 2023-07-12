@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { Operation, Scope, SectionItem } from "../types/types";
 
 const props = defineProps<{
@@ -10,20 +10,13 @@ const item = props.item;
 
 const emit = defineEmits(["enableScope", "updateValue"]);
 
-const oddClicks = ref<boolean>(true);
+const isClicked = ref<boolean>(false);
 
 const handleClick = () => {
-    oddClicks.value = !oddClicks.value;
+    if (isClicked.value === true) return;
+    isClicked.value = true;
     if (item.enableScope) emit("enableScope", item.enableScope);
     for (const operation of item.operationsIfEnabled) {
-        if (oddClicks.value) {
-            emit("updateValue", {
-                type: "default",
-                targetValue: operation.relatedValue,
-                number: operation.number,
-            });
-            continue;
-        }
         if (
             operation.executeIfScopeEnabled &&
             props.activeScopes.some(
@@ -39,46 +32,72 @@ const handleClick = () => {
         });
     }
 };
-
-const getOperationMessage = (operation: Operation) => {
-    let message = "";
-
-    switch (operation.type) {
-        case "add":
-            message = `Add ${operation.number} to ${operation.relatedValue}`;
-            break;
-        case "multiply":
-            message = `Multiply ${operation.number} with ${operation.relatedValue}`;
-            break;
-        default:
-            break;
-    }
-
-    return message;
-};
 </script>
 
 <template>
-    <div class="container">
+    <div class="item-container">
         <h3>{{ item.name }}</h3>
-        <p>{{ item.description }}</p>
-        <img :src="item.imgHref" :alt="item.name" width="100" height="100" />
-        <button @click="handleClick">Enable {{ item.name }}</button>
-
-        <div
-            v-for="operation in item.operationsIfEnabled"
-            :key="operation.type"
-        >
-            <p>{{ getOperationMessage(operation) }}</p>
+        <div class="image-container" :class="{ clicked: isClicked }">
+            <img
+                :src="item.imgHref"
+                :alt="item.name"
+                width="100"
+                height="100"
+                @click="handleClick"
+            />
+        </div>
+        <div class="description">
+            {{ item.description }}
         </div>
     </div>
 </template>
 
 <style>
-.container {
-    background-color: white;
-    color: black;
+.item-container {
     border-radius: 0.5em;
     margin: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+.image-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.image-container:hover {
+    border: 3px solid lightgreen;
+    cursor: pointer;
+}
+.clicked {
+    border: 3px solid lightgreen;
+    cursor: default !important;
+}
+
+.description {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5em;
+    background-color: black;
+    border-radius: 0.5em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    white-space: pre-line;
+}
+
+.item-container:hover .description {
+    display: block;
 }
 </style>

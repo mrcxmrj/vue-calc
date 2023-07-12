@@ -27,11 +27,8 @@ const passUpdateData = (updateObject: {
 </script>
 
 <template>
-    <div class="sectionWrapper">
+    <div class="sectionContainer">
         <h2>{{ section.name }}</h2>
-        <p v-if="section.mustSelectRequirement?.enabled">
-            {{ section.mustSelectRequirement.messageIfNotSelected }}
-        </p>
         <div class="items">
             <SectionItemDisplay
                 v-for="item in section.items"
@@ -40,18 +37,41 @@ const passUpdateData = (updateObject: {
                 :active-scopes="props.activeScopes"
                 @enable-scope="passScope"
                 @update-value="passUpdateData"
+                class="item"
             />
         </div>
     </div>
 </template>
 
 <style scoped>
-.sectionWrapper {
+.sectionContainer {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
     background-color: red;
-    color: white;
 }
-
 .items {
     display: flex;
+    flex-wrap: wrap;
+}
+
+.item {
+    flex: 1;
+    margin: 10px;
+}
+
+h2 {
+    text-align: center; /* Center align the header */
+}
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .items {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .item {
+        flex-basis: 100%; /* Take up full width on mobile */
+        margin-bottom: 10px;
+    }
 }
 </style>
