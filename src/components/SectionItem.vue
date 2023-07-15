@@ -20,12 +20,11 @@ const handleClick = () => {
     for (const operation of item.operationsIfEnabled) {
         if (
             operation.executeIfScopeEnabled &&
-            props.activeScopes.some(
+            !props.activeScopes.some(
                 (el) => el.id === operation.executeIfScopeEnabled
             )
         )
             continue;
-
         emit("updateValue", {
             type: operation.type,
             targetValue: operation.relatedValue,
