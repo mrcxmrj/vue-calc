@@ -63,8 +63,6 @@ const refreshPage = () => window.location.reload()
                 }}{{ values.price !== 0 ? values.price + summary.currency! : "-" }}
             </h1>
         </p>
-            <button @click="refreshPage" class="refresh-button">Reset</button>
-
     </div>
 </template>
 <style scoped>
@@ -74,10 +72,5 @@ const refreshPage = () => window.location.reload()
     background-color: red;
     box-sizing: border-box;
     padding: 10px;
-}
-
-.refresh-button {
-  font-size: 18px;
-  padding: 10px 20px;
 }
 </style>

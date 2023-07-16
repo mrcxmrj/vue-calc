@@ -93,15 +93,6 @@ const handleClick = () => {
     box-sizing: border-box;
 }
 
-.item-container:hover:not(.blocked) .image-container {
-    border: 3px solid lightgreen;
-    cursor: pointer;
-}
-
-.item-container:hover .description {
-    display: block;
-}
-
 @media (min-width: 768px) {
     .item-container {
         display: flex;
@@ -126,7 +117,15 @@ const handleClick = () => {
         white-space: pre-line;
     }
     .clicked.image-container {
-        border: 3px solid lightgreen;
+        outline: 3px solid lightgreen;
+    }
+    .item-container:hover .image-container {
+        outline: 3px solid lightgreen;
+        cursor: pointer;
+    }
+
+    .item-container:hover .description {
+        display: block;
     }
 }
 
