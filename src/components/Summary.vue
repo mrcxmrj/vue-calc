@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { endingOperations, summary } from "@/data/dataWrapper";
+import { defaultValues, endingOperations, summary } from "@/data/dataWrapper";
 import type { Scope, Values } from "@/types/types";
 import { watch, toRef } from "vue";
 
@@ -10,6 +10,10 @@ const props = defineProps<{
 }>();
 const values = props.values;
 const performEndingOperations = () => {
+    console.log(values)
+    values["price"] = defaultValues["price"]
+    values["active_working_hours"] = defaultValues["active_working_hours"]
+    values["multiplier"] = defaultValues["multiplier"]
     for (const operation of endingOperations) {
         switch (operation.type) {
             case "addValues":
