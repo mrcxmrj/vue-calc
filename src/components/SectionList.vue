@@ -29,7 +29,7 @@ const updateValue = ({
     number,
 }: {
     targetValue: keyof typeof values;
-    type: "add" | "multiply" | "default";
+    type: "add" | "multiply" | "set";
     number: number;
 }) => {
     switch (type) {
@@ -39,8 +39,8 @@ const updateValue = ({
         case "multiply":
             values[targetValue] *= number;
             break;
-        case "default":
-            values[targetValue] = defaultValues[targetValue];
+        case "set":
+            values[targetValue] = number;
             break;
     }
 };
@@ -67,15 +67,15 @@ const activeScopes = ref<Scope[]>([]);
 // toggles the presence of scope
 const enableScope = (scopeId: string) => {
     const scopeObject = scopes.find((el) => el.id === scopeId);
+
     if (!scopeObject) return;
     if (activeScopes.value.some((el) => el.id === scopeId)) {
         activeScopes.value = activeScopes.value.filter(
-            (el) => el !== scopeObject
+            (el) => el.id !== scopeObject?.id
         );
     } else {
         activeScopes.value.push(scopeObject);
     }
-    console.log(activeScopes);
 };
 </script>
 

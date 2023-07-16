@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onActivated, ref } from "vue";
 import type { Scope, SectionItem } from "../types/types";
 
 const props = defineProps<{
     item: SectionItem;
     activeScopes: Scope[];
-    blockSection: boolean;
+    isClicked: boolean;
 }>();
 const item = props.item;
 
-const emit = defineEmits(["enableScope", "updateValue"]);
+const emit = defineEmits(["enableScope", "updateValue", "changeClick"]);
 
-const isClicked = ref<boolean>(false);
+// const isClicked = ref<boolean>(false);
 
 const handleClick = () => {
-    if (isClicked.value || props.blockSection) return;
-    isClicked.value = true;
+    console.log(props.isClicked);
+    // if (props.blockSection) return;
     if (item.enableScope) emit("enableScope", item.enableScope);
     for (const operation of item.operationsIfEnabled) {
         if (
@@ -25,33 +25,54 @@ const handleClick = () => {
             )
         )
             continue;
-        emit("updateValue", {
-            type: operation.type,
-            targetValue: operation.relatedValue,
-            number: operation.number,
-        });
+
+        if (props.isClicked) {
+            // handling unclicking
+            if (operation.type === "add") {
+                emit("updateValue", {
+                    type: operation.type,
+                    targetValue: operation.relatedValue,
+                    number: -operation.number,
+                });
+            } else {
+                // this triggers only when we unclick crane/excavator while the other crane/excavator is active
+                // we set the value to one if there is a crane/excavator in active scopes
+                emit("updateValue", {
+                    type: "set",
+                    targetValue: operation.relatedValue,
+                    number: 1,
+                });
+                break;
+            }
+        } else {
+            // regular update value
+            emit("updateValue", {
+                type: operation.type,
+                targetValue: operation.relatedValue,
+                number: operation.number,
+            });
+        }
     }
+    // isClicked.value = !isClicked.value;
+    emit("changeClick", item.name);
 };
 </script>
 
 <template>
     <div
         class="item-container"
-        :class="{ clicked: isClicked, blocked: blockSection }"
+        :class="{ clicked: props.isClicked }"
         @click="handleClick"
     >
         <div class="text-container">
-            <h3 :style="{ color: blockSection ? 'gray' : '' }">
+            <h3>
                 {{ item.name }}
             </h3>
             <div class="description">
                 {{ item.description }}
             </div>
         </div>
-        <div
-            class="image-container"
-            :class="{ clicked: isClicked, blocked: blockSection }"
-        >
+        <div class="image-container" :class="{ clicked: props.isClicked }">
             <img
                 :src="item.imgHref"
                 :alt="item.name"
@@ -106,7 +127,6 @@ const handleClick = () => {
     }
     .clicked.image-container {
         border: 3px solid lightgreen;
-        cursor: default !important;
     }
 }
 
@@ -136,7 +156,6 @@ const handleClick = () => {
 
     .clicked.item-container {
         background-color: lightgreen;
-        cursor: default !important;
     }
 }
 </style>

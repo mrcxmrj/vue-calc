@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import type { Scope, Section } from "../types/types";
 import SectionItemDisplay from "./SectionItem.vue";
 
@@ -10,7 +10,7 @@ const props = defineProps<{
 const section = props.sectionData;
 const emit = defineEmits(["updateValue", "completeSection", "enableScope"]);
 
-const blockSection = ref<boolean>(false);
+// const blockSection = ref<boolean>(false);
 const passScope = (scopeId: string) => {
     emit("enableScope", scopeId);
 };
@@ -20,9 +20,26 @@ const passUpdateData = (updateObject: {
     targetValue: string;
     number: number;
 }) => {
-    if (section.selectionType === "single") blockSection.value = true;
+    // if (section.selectionType === "single") blockSection.value = true;
     emit("completeSection", section.name);
     emit("updateValue", updateObject);
+
+    // if (section.selectionType === "single") handleSingleChoice();
+};
+
+type ClickedChildren = { [itemName: string]: boolean };
+const clickedChildren: ClickedChildren = reactive({});
+
+const changeClick = (itemName: string) => {
+    if (section.selectionType === "single") {
+        for (const key of Object.keys(clickedChildren)) {
+            clickedChildren[key] = false;
+        }
+        clickedChildren[itemName] = true;
+    } else {
+        clickedChildren[itemName] = !clickedChildren[itemName];
+        console.log(clickedChildren);
+    }
 };
 </script>
 
@@ -35,11 +52,23 @@ const passUpdateData = (updateObject: {
                 :key="item.name"
                 :item="item"
                 :active-scopes="props.activeScopes"
+                :is-clicked="clickedChildren[item.name] || false"
+                @enable-scope="passScope"
+                @update-value="passUpdateData"
+                @change-click="changeClick"
+                ref="sectionItems"
+                class="item"
+            />
+            <!-- <SectionItemDisplay
+                v-for="item in section.items"
+                :key="item.name"
+                :item="item"
+                :active-scopes="props.activeScopes"
                 :block-section="blockSection"
                 @enable-scope="passScope"
                 @update-value="passUpdateData"
                 class="item"
-            />
+            /> -->
         </div>
     </div>
 </template>
