@@ -86,7 +86,7 @@ watch(() => props.isClicked, handleClick);
     </div>
 </template>
 
-<style>
+<style scoped>
 .image-container {
     position: relative;
     min-width: 100px;
