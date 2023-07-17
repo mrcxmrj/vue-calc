@@ -38,6 +38,8 @@ watch(() => props.optionalSectionChange, () => {if (props.incompleteRequiredSect
 watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 
 const requiredSectionsComplete = computed(() => props.incompleteRequiredSections.length === 0)
+const roundedPrice = computed(() => Math.round(values.price * 100) / 100)
+const roundedWorkHours = computed(() => Math.round((values.multiplied_building_days / 8) * 100) / 100)
 </script>
 
 <template>
@@ -55,11 +57,11 @@ const requiredSectionsComplete = computed(() => props.incompleteRequiredSections
         </ul>
         <hr />
         <p>
-            <b>Work hours: {{ requiredSectionsComplete ? values["multiplied_building_days"] / 8 : 0}}</b>
+            <b>Work hours: {{ requiredSectionsComplete ? roundedWorkHours : 0}}</b>
             <br />
             <h1>
                 {{ summary.totalPriceDescription
-                }}{{requiredSectionsComplete ? values.price + summary.currency! : "-" }}
+                }}{{requiredSectionsComplete ? roundedPrice + summary.currency! : "-" }}
             </h1>
         </p>
     </div>
