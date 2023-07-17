@@ -43,6 +43,7 @@ const updateValue = ({
             values[targetValue] = number;
             break;
     }
+    console.log(targetValue, values[targetValue]);
 };
 
 const requiredSections = sections.flatMap((section) =>
@@ -55,10 +56,12 @@ const requiredSections = sections.flatMap((section) =>
 );
 
 const incompleteRequiredSections = ref(requiredSections);
+const optionalSectionChange = ref(false);
 
 const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
-    // if the section is completed we remove it from the incompletedSections array
+    // if the section is completed we remove it from the incompletedRequiredSections array
     if (isCompleted) {
+        console.log("completing ", sectionName);
         incompleteRequiredSections.value =
             incompleteRequiredSections.value.filter(
                 (el) => el.name !== sectionName
@@ -70,11 +73,14 @@ const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
     if (
         !incompleteRequiredSections.value.some((el) => el.name === sectionName)
     ) {
-        const incompleteSection = requiredSections.find(
+        console.log("uncompleting ", sectionName);
+
+        const incompleteRequiredSection = requiredSections.find(
             (el) => el.name === sectionName
         );
-        if (!incompleteSection) return;
-        incompleteRequiredSections.value.push(incompleteSection);
+        if (incompleteRequiredSection)
+            incompleteRequiredSections.value.push(incompleteRequiredSection);
+        else optionalSectionChange.value = !optionalSectionChange.value;
     }
 };
 
@@ -108,6 +114,7 @@ const enableScope = (scopeId: string) => {
         />
         <SummaryComponent
             :incomplete-required-sections="incompleteRequiredSections"
+            :optional-section-change="optionalSectionChange"
             :activeScopes="activeScopes"
             :values="values"
         />

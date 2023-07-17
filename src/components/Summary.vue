@@ -5,11 +5,13 @@ import { watch, toRef } from "vue";
 
 const props = defineProps<{
     incompleteRequiredSections: { name: string; message: string }[];
+    optionalSectionChange: boolean;
     activeScopes: Scope[];
     values: Values;
 }>();
 const values = props.values;
 const performEndingOperations = () => {
+    console.log("ending ops")
     values["price"] = defaultValues["price"]
     values["active_working_hours"] = defaultValues["active_working_hours"]
     values["multiplier"] = defaultValues["multiplier"]
@@ -33,10 +35,11 @@ const performEndingOperations = () => {
     }
 };
 
-/* const reactiveIncompleteSections = toRef(props, "incompleteSections");
-watch(reactiveIncompleteSections, (currIncompleteSections) => {
-    if (currIncompleteSections.length === 0) performEndingOperations();
-}); */
+// const reactiveIncompleteSections = toRef(props, "incompleteRequiredSections");
+// watch(reactiveIncompleteSections, (currIncompleteSections) => {
+//     if (currIncompleteSections.length === 0) performEndingOperations();
+// });
+watch(() => props.optionalSectionChange, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 </script>
 
@@ -59,7 +62,7 @@ watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequire
             <br />
             <h1>
                 {{ summary.totalPriceDescription
-                }}{{ props.incompleteRequiredSections.length === 0 ? values.price + summary.currency! : "-" }}
+                }}{{props.incompleteRequiredSections.length === 0 ? values.price + summary.currency! : "-" }}
             </h1>
         </p>
     </div>
