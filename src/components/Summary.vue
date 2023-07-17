@@ -45,8 +45,8 @@ watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequire
         <p v-if="props.activeScopes.length === 0 || props.incompleteRequiredSections.length !== 0">
             {{ summary.noScopeDisclaimer }}
         </p>
-        <p v-else>
-            <h3>{{ activeScopes.map((item) => item.name).join(" + ") }}</h3>
+        <p style="font-size: larger;" v-else>
+            {{ activeScopes.map((item) => item.name).join(" + ") }}
         </p>
         <ul>
             <li v-for="section in props.incompleteRequiredSections" :key="section.name">
@@ -70,6 +70,11 @@ watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequire
     border-radius: 4px;
     background-color: red;
     box-sizing: border-box;
-    padding: 10px;
+    padding: 0px 20px 0px 20px;
+}
+
+hr {
+  border: 0;
+  border-bottom: 2px solid #fff;
 }
 </style>
