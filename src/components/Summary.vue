@@ -35,10 +35,6 @@ const performEndingOperations = () => {
     }
 };
 
-// const reactiveIncompleteSections = toRef(props, "incompleteRequiredSections");
-// watch(reactiveIncompleteSections, (currIncompleteSections) => {
-//     if (currIncompleteSections.length === 0) performEndingOperations();
-// });
 watch(() => props.optionalSectionChange, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 
