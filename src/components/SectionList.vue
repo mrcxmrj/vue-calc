@@ -43,6 +43,7 @@ const updateValue = ({
             values[targetValue] = number;
             break;
     }
+    console.log(values[targetValue]);
 };
 
 const requiredSections = sections.flatMap((section) =>

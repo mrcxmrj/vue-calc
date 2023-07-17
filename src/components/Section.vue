@@ -33,13 +33,10 @@ const clickedChildren: ClickedChildren = reactive({});
 const changeClick = (itemName: string) => {
     if (section.selectionType === "single") {
         for (const key of Object.keys(clickedChildren)) {
-            clickedChildren[key] = false;
+            if (key !== itemName) clickedChildren[key] = false;
         }
-        clickedChildren[itemName] = true;
-    } else {
-        clickedChildren[itemName] = !clickedChildren[itemName];
-        console.log(clickedChildren);
     }
+    clickedChildren[itemName] = !clickedChildren[itemName];
 };
 </script>
 
@@ -59,16 +56,6 @@ const changeClick = (itemName: string) => {
                 ref="sectionItems"
                 class="item"
             />
-            <!-- <SectionItemDisplay
-                v-for="item in section.items"
-                :key="item.name"
-                :item="item"
-                :active-scopes="props.activeScopes"
-                :block-section="blockSection"
-                @enable-scope="passScope"
-                @update-value="passUpdateData"
-                class="item"
-            /> -->
         </div>
     </div>
 </template>

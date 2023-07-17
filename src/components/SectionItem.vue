@@ -14,7 +14,6 @@ const emit = defineEmits(["enableScope", "updateValue", "changeClick"]);
 // const isClicked = ref<boolean>(false);
 
 const handleClick = () => {
-    console.log(props.isClicked);
     // if (props.blockSection) return;
     if (item.enableScope) emit("enableScope", item.enableScope);
     for (const operation of item.operationsIfEnabled) {
@@ -54,6 +53,7 @@ const handleClick = () => {
         }
     }
     // isClicked.value = !isClicked.value;
+    console.log("changeclick");
     emit("changeClick", item.name);
 };
 </script>
