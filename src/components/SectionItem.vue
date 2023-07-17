@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onActivated, ref } from "vue";
+import { onActivated, ref, watch } from "vue";
 import type { Scope, SectionItem } from "../types/types";
 
 const props = defineProps<{
@@ -12,6 +12,7 @@ const item = props.item;
 const emit = defineEmits(["enableScope", "updateValue", "changeClick"]);
 
 // const isClicked = ref<boolean>(false);
+const changeClicked = () => emit("changeClick", item.name);
 
 const handleClick = () => {
     // if (props.blockSection) return;
@@ -25,7 +26,7 @@ const handleClick = () => {
         )
             continue;
 
-        if (props.isClicked) {
+        if (!props.isClicked) {
             // handling unclicking
             if (operation.type === "add") {
                 emit("updateValue", {
@@ -54,15 +55,17 @@ const handleClick = () => {
     }
     // isClicked.value = !isClicked.value;
     console.log("changeclick");
-    emit("changeClick", item.name);
+    // emit("changeClick", item.name);
 };
+
+watch(() => props.isClicked, handleClick);
 </script>
 
 <template>
     <div
         class="item-container"
         :class="{ clicked: props.isClicked }"
-        @click="handleClick"
+        @click="changeClicked"
     >
         <div class="text-container">
             <h3>
