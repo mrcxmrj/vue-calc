@@ -54,10 +54,10 @@ const handleClick = () => {
         }
     }
     // isClicked.value = !isClicked.value;
-    console.log("changeclick");
     // emit("changeClick", item.name);
 };
 
+// in single option sections isClicked is sometimes updated without clicking
 watch(() => props.isClicked, handleClick);
 </script>
 

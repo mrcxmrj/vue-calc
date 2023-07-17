@@ -43,7 +43,6 @@ const updateValue = ({
             values[targetValue] = number;
             break;
     }
-    console.log(values[targetValue]);
 };
 
 const requiredSections = sections.flatMap((section) =>
@@ -55,12 +54,28 @@ const requiredSections = sections.flatMap((section) =>
         : []
 );
 
-const incompleteSections = ref(requiredSections);
+const incompleteRequiredSections = ref(requiredSections);
 
-const completeSection = (section: string) => {
-    incompleteSections.value = incompleteSections.value.filter(
-        (el) => el.name !== section
-    );
+const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
+    // if the section is completed we remove it from the incompletedSections array
+    if (isCompleted) {
+        incompleteRequiredSections.value =
+            incompleteRequiredSections.value.filter(
+                (el) => el.name !== sectionName
+            );
+        return;
+    }
+
+    // if the section is incomplete find if it is present in the incompleteRequiredSectionsArray and add if necessary
+    if (
+        !incompleteRequiredSections.value.some((el) => el.name === sectionName)
+    ) {
+        const incompleteSection = requiredSections.find(
+            (el) => el.name === sectionName
+        );
+        if (!incompleteSection) return;
+        incompleteRequiredSections.value.push(incompleteSection);
+    }
 };
 
 const activeScopes = ref<Scope[]>([]);
@@ -85,14 +100,14 @@ const enableScope = (scopeId: string) => {
         <SectionComponent
             v-for="section in sections"
             :key="section.name"
-            :sectionData="section"
+            :section-data="section"
             :active-scopes="activeScopes"
-            @updateValue="updateValue"
+            @update-value="updateValue"
             @enable-scope="enableScope"
-            @completeSection="completeSection"
+            @change-completed-sections="changeCompletedSections"
         />
         <SummaryComponent
-            :incompleteSections="incompleteSections"
+            :incomplete-required-sections="incompleteRequiredSections"
             :activeScopes="activeScopes"
             :values="values"
         />

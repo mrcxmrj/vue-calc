@@ -4,7 +4,7 @@ import type { Scope, Values } from "@/types/types";
 import { watch, toRef } from "vue";
 
 const props = defineProps<{
-    incompleteSections: { name: string; message: string }[];
+    incompleteRequiredSections: { name: string; message: string }[];
     activeScopes: Scope[];
     values: Values;
 }>();
@@ -33,34 +33,33 @@ const performEndingOperations = () => {
     }
 };
 
-const reactiveIncompleteSections = toRef(props, "incompleteSections");
+/* const reactiveIncompleteSections = toRef(props, "incompleteSections");
 watch(reactiveIncompleteSections, (currIncompleteSections) => {
     if (currIncompleteSections.length === 0) performEndingOperations();
-});
-
-const refreshPage = () => window.location.reload()
+}); */
+watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 </script>
 
 <template>
     <div class="summaryContainer">
-        <p v-if="props.activeScopes.length === 0">
+        <p v-if="props.activeScopes.length === 0 || props.incompleteRequiredSections.length !== 0">
             {{ summary.noScopeDisclaimer }}
         </p>
         <p v-else>
             <h3>{{ activeScopes.map((item) => item.name).join(" + ") }}</h3>
         </p>
         <ul>
-            <li v-for="section in props.incompleteSections" :key="section.name">
+            <li v-for="section in props.incompleteRequiredSections" :key="section.name">
                 {{ section.message }}
             </li>
         </ul>
         <hr />
         <p>
-            <b>Work hours: {{ values["multiplied_building_days"] / 8 }}</b>
+            <b>Work hours: {{ props.incompleteRequiredSections.length === 0 ? values["multiplied_building_days"] / 8 : 0}}</b>
             <br />
             <h1>
                 {{ summary.totalPriceDescription
-                }}{{ values.price !== 0 ? values.price + summary.currency! : "-" }}
+                }}{{ props.incompleteRequiredSections.length === 0 ? values.price + summary.currency! : "-" }}
             </h1>
         </p>
     </div>
