@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defaultValues, endingOperations, summary } from "@/data/dataWrapper";
 import type { Scope, Values } from "@/types/types";
-import { watch, toRef } from "vue";
+import { watch, toRef, computed } from "vue";
 
 const props = defineProps<{
     incompleteRequiredSections: { name: string; message: string }[];
@@ -41,11 +41,13 @@ const performEndingOperations = () => {
 // });
 watch(() => props.optionalSectionChange, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
+
+const requiredSectionsComplete = computed(() => props.incompleteRequiredSections.length === 0)
 </script>
 
 <template>
     <div class="summaryContainer">
-        <p v-if="props.activeScopes.length === 0 || props.incompleteRequiredSections.length !== 0">
+        <p v-if="props.activeScopes.length === 0 || !requiredSectionsComplete">
             {{ summary.noScopeDisclaimer }}
         </p>
         <p style="font-size: larger;" v-else>
@@ -58,11 +60,11 @@ watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequire
         </ul>
         <hr />
         <p>
-            <b>Work hours: {{ props.incompleteRequiredSections.length === 0 ? values["multiplied_building_days"] / 8 : 0}}</b>
+            <b>Work hours: {{ requiredSectionsComplete ? values["multiplied_building_days"] / 8 : 0}}</b>
             <br />
             <h1>
                 {{ summary.totalPriceDescription
-                }}{{props.incompleteRequiredSections.length === 0 ? values.price + summary.currency! : "-" }}
+                }}{{requiredSectionsComplete ? values.price + summary.currency! : "-" }}
             </h1>
         </p>
     </div>
