@@ -43,7 +43,6 @@ const updateValue = ({
             values[targetValue] = number;
             break;
     }
-    console.log(targetValue, values[targetValue]);
 };
 
 const requiredSections = sections.flatMap((section) =>
@@ -61,7 +60,6 @@ const optionalSectionChange = ref(false);
 const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
     // if the section is completed we remove it from the incompletedRequiredSections array
     if (isCompleted) {
-        console.log("completing ", sectionName);
         incompleteRequiredSections.value =
             incompleteRequiredSections.value.filter(
                 (el) => el.name !== sectionName
@@ -73,8 +71,6 @@ const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
     if (
         !incompleteRequiredSections.value.some((el) => el.name === sectionName)
     ) {
-        console.log("uncompleting ", sectionName);
-
         const incompleteRequiredSection = requiredSections.find(
             (el) => el.name === sectionName
         );

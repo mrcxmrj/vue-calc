@@ -11,7 +11,6 @@ const props = defineProps<{
 }>();
 const values = props.values;
 const performEndingOperations = () => {
-    console.log("ending ops")
     values["price"] = defaultValues["price"]
     values["active_working_hours"] = defaultValues["active_working_hours"]
     values["multiplier"] = defaultValues["multiplier"]
