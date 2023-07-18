@@ -38,8 +38,31 @@ watch(() => props.optionalSectionChange, () => {if (props.incompleteRequiredSect
 watch(() => props.incompleteRequiredSections, () => {if (props.incompleteRequiredSections.length === 0) performEndingOperations()})
 
 const requiredSectionsComplete = computed(() => props.incompleteRequiredSections.length === 0)
+const getWorkHours = () => {
+    const template = summary.items[0].text || ""
+
+    const regex = /#{(.*?),(.*?)}/g;
+    const matches = regex.exec(template);
+    if (!matches || matches.length !== 3) {
+        console.error("wrong summary template")
+        return  -1
+    }
+    
+    const value = matches[1].trim();
+    const operation = matches[2].trim();
+    console.log(value, operation)
+
+    const isValidKey = (obj: Values, key: string): key is keyof Values  => key in obj;
+
+    if(operation === "numberOfWorkingHours" && isValidKey(values, value)) {
+        return values[value] * 8
+    }
+
+    console.error("wrong operation provided in the template")
+    return -1
+}
 const roundedPrice = computed(() => Math.round(values.price * 100) / 100)
-const roundedWorkHours = computed(() => Math.round((values.multiplied_building_days / 8) * 100) / 100)
+const roundedWorkHours = computed(() => Math.round(getWorkHours() * 100) / 100)
 </script>
 
 <template>
