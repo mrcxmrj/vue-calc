@@ -13,7 +13,7 @@ const emit = defineEmits(["toggleScope", "updateValue", "changeClick"]);
 
 const changeClicked = () => emit("changeClick", item.name);
 
-const handleClick = () => {
+const handleClickedStatusChange = () => {
     if (item.enableScope) emit("toggleScope", item.enableScope);
     for (const operation of item.operationsIfEnabled) {
         if (
@@ -31,7 +31,8 @@ const handleClick = () => {
                     targetValue: operation.relatedValue,
                     number: -operation.number,
                 });
-            } else {
+            }
+            if (operation.type === "multiply") {
                 emit("updateValue", {
                     type: "set",
                     targetValue: operation.relatedValue,
@@ -49,7 +50,7 @@ const handleClick = () => {
     }
 };
 
-watch(() => props.isClicked, handleClick);
+watch(() => props.isClicked, handleClickedStatusChange);
 </script>
 
 <template>
