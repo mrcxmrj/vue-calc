@@ -9,14 +9,12 @@ const props = defineProps<{
 }>();
 const item = props.item;
 
-const emit = defineEmits(["enableScope", "updateValue", "changeClick"]);
+const emit = defineEmits(["toggleScope", "updateValue", "changeClick"]);
 
-// const isClicked = ref<boolean>(false);
 const changeClicked = () => emit("changeClick", item.name);
 
 const handleClick = () => {
-    // if (props.blockSection) return;
-    if (item.enableScope) emit("enableScope", item.enableScope);
+    if (item.enableScope) emit("toggleScope", item.enableScope);
     for (const operation of item.operationsIfEnabled) {
         if (
             operation.executeIfScopeEnabled &&
@@ -27,7 +25,6 @@ const handleClick = () => {
             continue;
 
         if (!props.isClicked) {
-            // handling unclicking
             if (operation.type === "add") {
                 emit("updateValue", {
                     type: operation.type,
@@ -35,8 +32,6 @@ const handleClick = () => {
                     number: -operation.number,
                 });
             } else {
-                // this triggers only when we unclick crane/excavator while the other crane/excavator is active
-                // we set the value to one if there is a crane/excavator in active scopes
                 emit("updateValue", {
                     type: "set",
                     targetValue: operation.relatedValue,
@@ -45,7 +40,6 @@ const handleClick = () => {
                 break;
             }
         } else {
-            // regular update value
             emit("updateValue", {
                 type: operation.type,
                 targetValue: operation.relatedValue,
@@ -53,11 +47,8 @@ const handleClick = () => {
             });
         }
     }
-    // isClicked.value = !isClicked.value;
-    // emit("changeClick", item.name);
 };
 
-// in single option sections isClicked is sometimes updated without clicking
 watch(() => props.isClicked, handleClick);
 </script>
 

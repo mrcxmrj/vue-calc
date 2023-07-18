@@ -58,7 +58,6 @@ const incompleteRequiredSections = ref(requiredSections);
 const optionalSectionChange = ref(false);
 
 const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
-    // if the section is completed we remove it from the incompletedRequiredSections array
     if (isCompleted) {
         incompleteRequiredSections.value =
             incompleteRequiredSections.value.filter(
@@ -67,7 +66,6 @@ const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
         return;
     }
 
-    // if the section is incomplete find if it is present in the incompleteRequiredSectionsArray and add if necessary
     if (
         !incompleteRequiredSections.value.some((el) => el.name === sectionName)
     ) {
@@ -82,8 +80,7 @@ const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
 
 const activeScopes = ref<Scope[]>([]);
 
-// toggles the presence of scope
-const enableScope = (scopeId: string) => {
+const toggleScope = (scopeId: string) => {
     const scopeObject = scopes.find((el) => el.id === scopeId);
 
     if (!scopeObject) return;
@@ -105,7 +102,7 @@ const enableScope = (scopeId: string) => {
             :section-data="section"
             :active-scopes="activeScopes"
             @update-value="updateValue"
-            @enable-scope="enableScope"
+            @toggle-scope="toggleScope"
             @change-completed-sections="changeCompletedSections"
         />
         <SummaryComponent

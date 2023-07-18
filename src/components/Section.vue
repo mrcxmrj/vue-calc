@@ -11,12 +11,11 @@ const section = props.sectionData;
 const emit = defineEmits([
     "updateValue",
     "changeCompletedSections",
-    "enableScope",
+    "toggleScope",
 ]);
 
-// const blockSection = ref<boolean>(false);
 const passScope = (scopeId: string) => {
-    emit("enableScope", scopeId);
+    emit("toggleScope", scopeId);
 };
 
 const passUpdateData = (updateObject: {
@@ -24,10 +23,7 @@ const passUpdateData = (updateObject: {
     targetValue: string;
     number: number;
 }) => {
-    // if (section.selectionType === "single") blockSection.value = true;
     emit("updateValue", updateObject);
-
-    // if (section.selectionType === "single") handleSingleChoice();
 };
 
 type ClickedChildren = { [itemName: string]: boolean };
@@ -58,7 +54,7 @@ const changeClick = (itemName: string) => {
                 :item="item"
                 :active-scopes="props.activeScopes"
                 :is-clicked="clickedChildren[item.name] || false"
-                @enable-scope="passScope"
+                @toggle-scope="passScope"
                 @update-value="passUpdateData"
                 @change-click="changeClick"
                 ref="sectionItems"
