@@ -50,7 +50,6 @@ const getWorkHours = () => {
     
     const value = matches[1].trim();
     const operation = matches[2].trim();
-    console.log(value, operation)
 
     const isValidKey = (obj: Values, key: string): key is keyof Values  => key in obj;
 

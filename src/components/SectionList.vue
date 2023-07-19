@@ -43,7 +43,6 @@ const updateValue = ({
             values[targetValue] = number;
             break;
     }
-    console.log(targetValue, values[targetValue]);
 };
 
 const requiredSections = sections.flatMap((section) =>
@@ -95,8 +94,6 @@ const toggleScope = (scopeId: string) => {
         activeScopes.value = [...activeScopes.value, scopeObject];
     }
     lastChangedScope.value = scopeObject;
-
-    console.log(activeScopes.value);
 };
 </script>
 

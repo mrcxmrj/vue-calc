@@ -15,7 +15,6 @@ const emit = defineEmits(["toggleScope", "updateValue", "changeClick"]);
 const changeClicked = () => emit("changeClick", item.name);
 
 const performOperations = (customScopeList?: Scope[]) => {
-    console.log("performing operations in ", item.name, props.isClicked);
     const activeScopes = customScopeList || props.activeScopes;
     for (const operation of item.operationsIfEnabled) {
         if (
@@ -24,12 +23,10 @@ const performOperations = (customScopeList?: Scope[]) => {
                 (el) => el.id === operation.executeIfScopeEnabled
             )
         ) {
-            console.log("cont", props.activeScopes);
             continue;
         }
 
         if (!props.isClicked) {
-            console.log("unclicking", item.name);
             if (operation.type === "add") {
                 emit("updateValue", {
                     type: operation.type,
@@ -46,8 +43,6 @@ const performOperations = (customScopeList?: Scope[]) => {
                 break;
             }
         } else {
-            console.log("updating values", item.name);
-
             emit("updateValue", {
                 type: operation.type,
                 targetValue: operation.relatedValue,
@@ -67,29 +62,12 @@ watch(
     () => props.activeScopes,
     () => {
         if (props.activeScopes.some((el) => el.name === item.name)) {
-            console.log("true! from ", item.name);
             performOperations();
         } else if (props.lastChangedScope?.name === item.name) {
-            console.log("true! from ", item.name);
-
             performOperations([...props.activeScopes, props.lastChangedScope]);
         }
     }
 );
-/* watch(
-    () => [props.isClicked, props.activeScopes],
-    () => {
-        if (props.activeScopes.some((el) => el.name === item.name)) {
-            console.log("true! from ", item.name);
-            performOperations();
-        } else if (props.isClicked) {
-            console.log("changing click status");
-            if (item.enableScope) emit("toggleScope", item.enableScope);
-            performOperations();
-            // handleClickedStatusChange();
-        }
-    }
-); */
 </script>
 
 <template>
