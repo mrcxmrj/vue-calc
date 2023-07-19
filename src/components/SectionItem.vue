@@ -4,70 +4,13 @@ import type { Scope, SectionItem } from "../types/types";
 
 const props = defineProps<{
     item: SectionItem;
-    activeScopes: Scope[];
     isClicked: boolean;
-    lastChangedScope: Scope | undefined;
 }>();
 const item = props.item;
 
-const emit = defineEmits(["toggleScope", "updateValue", "changeClick"]);
+const emit = defineEmits(["changeClick"]);
 
-const changeClicked = () => emit("changeClick", item.name);
-
-const performOperations = (customScopeList?: Scope[]) => {
-    const activeScopes = customScopeList || props.activeScopes;
-    for (const operation of item.operationsIfEnabled) {
-        if (
-            operation.executeIfScopeEnabled &&
-            !activeScopes.some(
-                (el) => el.id === operation.executeIfScopeEnabled
-            )
-        ) {
-            continue;
-        }
-
-        if (!props.isClicked) {
-            if (operation.type === "add") {
-                emit("updateValue", {
-                    type: operation.type,
-                    targetValue: operation.relatedValue,
-                    number: -operation.number,
-                });
-            }
-            if (operation.type === "multiply") {
-                emit("updateValue", {
-                    type: "set",
-                    targetValue: operation.relatedValue,
-                    number: 1,
-                });
-                break;
-            }
-        } else {
-            emit("updateValue", {
-                type: operation.type,
-                targetValue: operation.relatedValue,
-                number: operation.number,
-            });
-        }
-    }
-};
-
-const handleClickedStatusChange = () => {
-    if (item.enableScope) emit("toggleScope", item.enableScope);
-    else performOperations();
-};
-
-watch(() => props.isClicked, handleClickedStatusChange);
-watch(
-    () => props.activeScopes,
-    () => {
-        if (props.activeScopes.some((el) => el.name === item.name)) {
-            performOperations();
-        } else if (props.lastChangedScope?.name === item.name) {
-            performOperations([...props.activeScopes, props.lastChangedScope]);
-        }
-    }
-);
+const changeClicked = () => emit("changeClick", item);
 </script>
 
 <template>

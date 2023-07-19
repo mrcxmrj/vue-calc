@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref, toRefs, watch } from "vue";
-import type { Scope, Section } from "../types/types";
+import type { Operation, Scope, Section, SectionItem } from "../types/types";
 import SectionItemDisplay from "./SectionItem.vue";
 
 const props = defineProps<{
     sectionData: Section;
     activeScopes: Scope[];
-    lastChangedScope: Scope | undefined;
 }>();
 const section = props.sectionData;
 const emit = defineEmits([
@@ -15,34 +14,90 @@ const emit = defineEmits([
     "toggleScope",
 ]);
 
-const passScope = (scopeId: string) => {
-    emit("toggleScope", scopeId);
-};
-
-const passUpdateData = (updateObject: {
-    type: string;
-    targetValue: string;
-    number: number;
-}) => {
-    emit("updateValue", updateObject);
-};
-
 type ClickedChildren = { [itemName: string]: boolean };
 const clickedChildren: ClickedChildren = reactive({});
 
-const changeClick = (itemName: string) => {
-    if (section.selectionType === "single") {
-        for (const key of Object.keys(clickedChildren)) {
-            if (key !== itemName) clickedChildren[key] = false;
+const changeClickedChildren = (item: SectionItem) => {
+    for (const key of Object.keys(clickedChildren)) {
+        if (clickedChildren[key]) {
+            const unclickedItem = section.items.find(
+                (item) => item.name === key
+            )!;
+            undoOperations(unclickedItem.operationsIfEnabled);
         }
     }
 
-    clickedChildren[itemName] = !clickedChildren[itemName];
+    if (section.selectionType === "single") {
+        for (const key of Object.keys(clickedChildren)) {
+            if (key !== item.name) {
+                clickedChildren[key] = false;
+            }
+        }
+    }
+
+    clickedChildren[item.name] = !clickedChildren[item.name];
+
     const anyChildrenClicked = Object.values(clickedChildren).some(
         (value) => value === true
     );
+    emit("toggleScope", item.enableScope);
     emit("changeCompletedSections", section.name, anyChildrenClicked);
 };
+
+const undoOperations = (operations: Operation[]) => {
+    console.log("unclicking");
+    for (const operation of operations) {
+        if (
+            operation.executeIfScopeEnabled &&
+            !props.activeScopes.some(
+                (el) => el.id === operation.executeIfScopeEnabled
+            )
+        ) {
+            continue;
+        }
+        if (operation.type === "add")
+            emit("updateValue", {
+                type: operation.type,
+                targetValue: operation.relatedValue,
+                number: -operation.number,
+            });
+        if (operation.type === "multiply") {
+            emit("updateValue", {
+                type: "set",
+                targetValue: operation.relatedValue,
+                number: 0,
+            });
+            break;
+        }
+    }
+};
+
+const performOperations = (operations: Operation[]) => {
+    for (const operation of operations) {
+        if (
+            operation.executeIfScopeEnabled &&
+            !props.activeScopes.some(
+                (el) => el.id === operation.executeIfScopeEnabled
+            )
+        ) {
+            continue;
+        }
+
+        emit("updateValue", {
+            type: operation.type,
+            targetValue: operation.relatedValue,
+            number: operation.number,
+        });
+    }
+};
+
+watch(clickedChildren, () => {
+    for (const child of section.items) {
+        if (clickedChildren[child.name]) {
+            performOperations(child.operationsIfEnabled);
+        }
+    }
+});
 </script>
 
 <template>
@@ -53,12 +108,8 @@ const changeClick = (itemName: string) => {
                 v-for="item in section.items"
                 :key="item.name"
                 :item="item"
-                :active-scopes="props.activeScopes"
                 :is-clicked="clickedChildren[item.name] || false"
-                :last-changed-scope="lastChangedScope"
-                @toggle-scope="passScope"
-                @update-value="passUpdateData"
-                @change-click="changeClick"
+                @change-click="changeClickedChildren"
                 ref="sectionItems"
                 class="item"
             />

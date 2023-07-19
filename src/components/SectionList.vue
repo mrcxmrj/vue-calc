@@ -43,6 +43,7 @@ const updateValue = ({
             values[targetValue] = number;
             break;
     }
+    console.log(targetValue, values[targetValue]);
 };
 
 const requiredSections = sections.flatMap((section) =>
@@ -80,7 +81,6 @@ const changeCompletedSections = (sectionName: string, isCompleted: boolean) => {
 };
 
 const activeScopes = ref<Scope[]>([]);
-const lastChangedScope = ref<Scope>();
 
 const toggleScope = (scopeId: string) => {
     const scopeObject = scopes.find((el) => el.id === scopeId);
@@ -93,7 +93,6 @@ const toggleScope = (scopeId: string) => {
     } else {
         activeScopes.value = [...activeScopes.value, scopeObject];
     }
-    lastChangedScope.value = scopeObject;
 };
 </script>
 
@@ -104,7 +103,6 @@ const toggleScope = (scopeId: string) => {
             :key="section.name"
             :section-data="section"
             :active-scopes="activeScopes"
-            :last-changed-scope="lastChangedScope"
             @update-value="updateValue"
             @toggle-scope="toggleScope"
             @change-completed-sections="changeCompletedSections"
