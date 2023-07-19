@@ -45,7 +45,6 @@ const changeClickedChildren = (item: SectionItem) => {
 };
 
 const undoOperations = (operations: Operation[]) => {
-    console.log("unclicking");
     for (const operation of operations) {
         if (
             operation.executeIfScopeEnabled &&

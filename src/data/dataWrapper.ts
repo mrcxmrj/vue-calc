@@ -24,7 +24,6 @@ const endingOperations: EndingOperation[] =
     (typedData.find((item) => item.type === "endingOperationsDefinition")
         ?.items as EndingOperation[]) || [];
 
-// there is only one summary
 const summary: SummaryDefinition = typedData.find(
     (item) => item.type === "summaryDefinition"
 ) as SummaryDefinition;
@@ -32,9 +31,6 @@ const summary: SummaryDefinition = typedData.find(
 const values: ValueItem[] =
     (typedData.find((item) => item.type === "valuesDefinition")
         ?.items as ValueItem[]) || [];
-
-// const values: ValueItem[] = valueItems.filter((item) => item.type === "value");
-// const price: ValueItem = valueItems.find((item) => item.type === "price")!;
 
 const defaultValues: Record<string, number> = {};
 for (const item of values) {
