@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, toRefs, watch } from "vue";
 import type { Scope, Section } from "../types/types";
 import SectionItemDisplay from "./SectionItem.vue";
 
 const props = defineProps<{
     sectionData: Section;
     activeScopes: Scope[];
+    lastChangedScope: Scope | undefined;
 }>();
 const section = props.sectionData;
 const emit = defineEmits([
@@ -54,6 +55,7 @@ const changeClick = (itemName: string) => {
                 :item="item"
                 :active-scopes="props.activeScopes"
                 :is-clicked="clickedChildren[item.name] || false"
+                :last-changed-scope="lastChangedScope"
                 @toggle-scope="passScope"
                 @update-value="passUpdateData"
                 @change-click="changeClick"
